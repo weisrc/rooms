@@ -2,6 +2,12 @@ import { serve } from "https://deno.land/std/http/server.ts";
 
 const rooms: Record<string, Set<WebSocket>> = {};
 
+const channel = new BroadcastChannel("");
+
+channel.onmessage = ({ data: [url, data] }) => {
+	rooms[url]?.forEach((peer) => peer.send(data));
+};
+
 function handle(req: Request): Response {
 	if (req.headers.get("upgrade") != "websocket") {
 		return new Response(null, { status: 501 });
@@ -16,6 +22,7 @@ function handle(req: Request): Response {
 			if (peer === socket) continue;
 			peer.send(data);
 		}
+		channel.postMessage([req.url, data]);
 	};
 
 	socket.onopen = () => peers.add(socket);
