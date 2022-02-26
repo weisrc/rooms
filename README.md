@@ -40,6 +40,10 @@ Right now, there are no rate limiting policies. However...
 
 - Using this in production. (I might shut it down)
 
+## Limitations (Deno Deploy)
+
+- May not receive broadcasts from different regions of the world. (Will soon use the BroadcastChannel API of Deno Deploy to fix this.)
+
 ## License
 
 MIT
